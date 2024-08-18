@@ -1,7 +1,8 @@
 package com.cxh.springframework.test;
 
-import com.cxh.springframework.BeanDefinition;
-import com.cxh.springframework.BeanFactory;
+import com.cxh.springframework.beans.factory.config.BeanDefinition;
+import com.cxh.springframework.beans.factory.BeanFactory;
+import com.cxh.springframework.beans.factory.support.DefaultListableBeanFactory;
 import com.cxh.springframework.test.bean.UserService;
 import org.junit.Test;
 
@@ -9,12 +10,18 @@ public class ApiTest {
 
     @Test
     public void test_BeanFactory(){
-        BeanFactory beanFactory = new BeanFactory();
+        // 初始化BeanFactory
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
 
-        BeanDefinition beanDefinition = new BeanDefinition(new UserService());
-        beanFactory.registerBeanDefinition("UserService", beanDefinition);
+        // 注册bean
+        BeanDefinition beanDefinition = new BeanDefinition(UserService.class);
+        beanFactory.registerBeanDefiniton("userService", beanDefinition);
 
-        UserService userService = (UserService) beanFactory.getBean("UserService");
+        // 获取bean
+        UserService userService = (UserService) beanFactory.getBean("userService");
         userService.queryUserInfo();
+
+        UserService userService1 = (UserService) beanFactory.getBean("userService");
+        userService1.queryUserInfo();
     }
 }
