@@ -18,7 +18,7 @@ public class ApiTest {
         beanFactory.registerBeanDefiniton("userService", beanDefinition);
 
         // 获取bean
-        UserService userService = (UserService) beanFactory.getBean("userService");
+        UserService userService = (UserService) beanFactory.getBean("userService", "张三");  // 可满足带构造函数的对象创建
         userService.queryUserInfo();
 
         UserService userService1 = (UserService) beanFactory.getBean("userService");
