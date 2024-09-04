@@ -13,19 +13,30 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
     @Override
     public Object getBean(String beanName) throws BeansException {
+        return doGetBean(beanName, null);
+    }
+
+    @Override
+    public Object getBean(String beanName, Object... args) throws BeansException{
+        return doGetBean(beanName, args);
+    }
+
+    protected <T> T doGetBean(final String beanName, final Object[] args){
         // bean register由具体子类实现，子类添加至子类自己的map
         // get bean 会先判断父类的map是否存在，存在返回；不存在从子类自己的map获取并添加至父类map
         // 目前默认单例bean，故直接调用 DefaultSingletonBeanRegistry#getSingleton
         Object bean = getSingleton(beanName);
+
         if(bean != null){
-            return bean;
+            return (T) bean;
         }
 
         // 具体实现由具体子类重写，便于扩展
 
         // 如果bean为null，则调用具体子类的getBeanDefiniton，从其map中获取BeanDefiniton  （不同实现类管理自己的bean，便于管理
         BeanDefinition beanDefinition = getBeanDefiniton(beanName);
-        return createBean(beanName, beanDefinition);   // 在父类map中添加bean（从子类获取，添加至父类
+
+        return (T) createBean(beanName, beanDefinition, args); // 在父类map中添加bean（从子类获取，添加至父类
     }
 
     /**
@@ -33,5 +44,5 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      */
     protected abstract BeanDefinition getBeanDefiniton(String beanName) throws BeansException;
 
-    protected abstract Object createBean(String beanName, BeanDefinition beanDefinition) throws BeansException;
+    protected abstract Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException;
 }
