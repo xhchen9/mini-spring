@@ -27,7 +27,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         // 目前默认单例bean，故直接调用 DefaultSingletonBeanRegistry#getSingleton
         Object bean = getSingleton(beanName);
 
-        if(bean != null){
+        if(bean != null){  // DefaultSingletonBeanRegistry中存在直接返回，否则从子类DefaultListableBeanFactory取
             return (T) bean;
         }
 
